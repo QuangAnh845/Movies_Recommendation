@@ -36,24 +36,14 @@ Cụm máy chủ Python phụ trách việc tải ma trận, tính toán độ t
 1. Mở thư mục chứa mã nguồn Python của dự án.
 2. Cài đặt các thư viện tính toán nâng cao bằng lệnh:
 ```bash
-
-```
-
-
-
 pip install pandas scikit-learn flask pymongo dnspython certifi axios
-
 ```
 3.  Khởi động server Flask:
-    ```bash
+```bash
 python ai_server.py
 
 ```
-
-```
 *(Hệ thống sẽ báo chạy thành công tại địa chỉ API gốc: `http://localhost:5000`)*.
-
-```
 
 ### Bước 2: Khởi động Backend API Gateway (Terminal 2)
 
@@ -66,20 +56,13 @@ npm install express mongodb axios dotenv amqplib csv-parser
 
 ```
 
-
-
-```
 3.  Cấu hình mã khóa cá nhân `TMDB_API_KEY` của bạn vào đầu file `api.js` hoặc file `.env`.
 4.  Khởi động Node.js server:
-    ```bash
+```bash
 node api.js
 
 ```
-
-```
 *(Hệ thống sẽ báo cổng kết nối chạy thành công tại địa chỉ: `http://localhost:3000`)*.
-
-```
 
 ### Bước 3: Mở Giao diện Dashboard hiển thị (Trình duyệt)
 

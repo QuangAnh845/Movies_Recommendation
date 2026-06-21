@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Gợi Ý Phim AI</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #141414; 
+            color: white; 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center; 
+        }
+        h1 { color: #E50914; margin-bottom: 5px; font-size: 26pt;}
+        p.subtitle { color: #aaa; margin-top: 0; margin-bottom: 30px; font-size: 12pt; }
+        
+        .search-box { margin: 20px 0; }
+        input { 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 4px; 
+            width: 320px; 
+            outline: none; 
+            background-color: #333;
+            color: white;
+        }
+        button { 
+            padding: 14px 28px; 
+            font-size: 16px; 
+            background-color: #E50914; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            margin-left: 10px;
+        }
+        button:hover { background-color: #f40612; }
+        
+        #status { margin: 20px 0; font-style: italic; color: #aaa; font-size: 12pt; }
+        
+        /* Khung hiển thị Gu phim lịch sử */
+        #historyContainer {
+            max-width: 900px;
+            margin: 0 auto 25px auto;
+            text-align: left;
+            display: none; 
+        }
+        .history-box {
+            background-color: #222;
+            border-left: 5px solid #f5c518;
+            padding: 15px 20px;
+            border-radius: 4px;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #ddd;
+        }
+        .history-box strong { color: #f5c518; font-size: 13pt; display: block; margin-bottom: 5px;}
+        
+        /* Grid hiển thị danh sách phim đề xuất */
+        .movie-grid { 
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            flex-wrap: wrap; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .movie-card { 
+            background-color: #222; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            width: 250px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
+        .movie-card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.3); 
+        }
+        .movie-poster { 
+            width: 100%; 
+            height: 375px; 
+            object-fit: cover; 
+            transition: opacity 0.3s ease;
+        }
+        .movie-card:hover .movie-poster { opacity: 0.85; }
+        .movie-info { padding: 15px; text-align: left; }
+        .movie-title { font-size: 13pt; margin: 0 0 10px 0; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ai-rating { 
+            display: inline-block; 
+            background-color: #f5c518; 
+            color: black; 
+            font-weight: bold; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 10pt; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🍿 Khám Phá Điện Ảnh Cùng AI</h1>
+    <p class="subtitle">Nhập mã khán giả của bạn để hệ thống tính toán ma trận và gợi ý phim</p>
+    
+    <div class="search-box">
+        <input type="text" id="userIdInput" placeholder="Ví dụ nhập: ML_1, ML_112, ML_42...">
+        <button onclick="fetchRecommendations()">Khám Phá Ngay</button>
+    </div>
+
+    <div id="status"></div>
+    <div id="historyContainer"></div>
+
+    <div class="movie-grid" id="movieContainer"></div>
+
+    <script>
+        async function fetchRecommendations() {
+            const userId = document.getElementById('userIdInput').value.trim();
+            const statusDiv = document.getElementById('status');
+            const historyContainer = document.getElementById('historyContainer');
+            const movieContainer = document.getElementById('movieContainer');
+            
+            if (!userId) {
+                alert("Vui lòng điền mã số khán giả ID!"); 
+                return;
+            }
+
+            // Reset và làm sạch giao diện cũ trước khi tải dữ liệu mới
+            movieContainer.innerHTML = '';
+            historyContainer.style.display = 'none';
+            historyContainer.innerHTML = '';
+            statusDiv.innerHTML = '⚙️ Đang gửi tín hiệu phân tích ma trận dữ liệu lớn...';
+
+            try {
+                // ==========================================
+                // LUỒNG 1: GỌI LẤY LỊCH SỬ ĐÁNH GIÁ (GU CỦA BẠN)
+                // ==========================================
+                try {
+                    const historyRes = await fetch(`http://localhost:3000/api/users/${userId}/history`);
+                    const historyData = await historyRes.json();
+                    
+                    if(historyData.success && historyData.data && historyData.data.length > 0) {
+                        const historyText = historyData.data.map(h => `<em>${h.title}</em> (${h.rating}⭐)`).join('  •  ');
+                        historyContainer.innerHTML = `
+                            <div class="history-box">
+                                <strong>💡 Hồ sơ sở thích trong quá khứ của bạn:</strong>
+                                Vì bạn đã từng chấm điểm rất cao cho các bộ phim: <br> ${historyText}
+                            </div>
+                        `;
+                        historyContainer.style.display = 'block';
+                    }
+                } catch (hErr) {
+                    console.log("Không thể kết xuất vùng lịch sử thích, tự động lướt qua.");
+                }
+
+                // ==========================================
+                // LUỒNG 2: GỌI LẤY GỢI Ý PHIM TỪ MÔ HÌNH AI
+                // ==========================================
+                const response = await fetch(`http://localhost:3000/api/users/${userId}/recommendations`);
+                const data = await response.json();
+
+                if (data.success && data.data && data.data.length > 0) {
+                    statusDiv.innerHTML = '✅ <span style="color:#4caf50;">Hệ thống AI đã tìm thấy những bộ phim phù hợp nhất với gu của bạn!</span>';
+                    
+                    data.data.forEach(movie => {
+                        const card = document.createElement('div');
+                        card.className = 'movie-card';
+                        card.innerHTML = `
+                            <!-- Bọc liên kết sâu chuyển hướng sang tab TMDB toàn cầu -->
+                            <a href="${movie.tmdb_url}" target="_blank" style="text-decoration: none; color: inherit;">
+                                <img src="${movie.poster_url}" alt="${movie.title}" class="movie-poster" 
+                                     onerror="this.src='https://via.placeholder.com/500x750?text=No+Poster'">
+                                <div class="movie-info">
+                                    <h3 class="movie-title" title="${movie.title}">${movie.title}</h3>
+                                    <div class="ai-rating">⭐ AI Dự đoán: ${movie.predicted_rating} sao</div>
+                                </div>
+                            </a>
+                        `;
+                        movieContainer.appendChild(card);
+                    });
+                } else {
+                    statusDiv.innerHTML = '❌ Không tìm thấy dữ liệu. Có thể người dùng này chưa có đủ đánh giá để AI học, hoặc bạn gõ sai ID.';
+                }
+
+            } catch (error) {
+                statusDiv.innerHTML = '⚠️ Lỗi cổng kết nối. Hãy đảm bảo Server Node.js (cổng 3000) và Server Python (cổng 5000) đều đang khởi chạy!';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "title": "In Her Wake",
+    "price": 12.84
+  },
+  {
+    "id": 2,
+    "title": "How Music Works",
+    "price": 37.32
+  },
+  {
+    "id": 3,
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": 30.52
+  },
+  {
+    "id": 4,
+    "title": "Chase Me (Paris Nights #2)",
+    "price": 25.27
+  },
+  {
+    "id": 5,
+    "title": "Black Dust",
+    "price": 34.53
+  },
+  {
+    "id": 6,
+    "title": "Birdsong: A Story in Pictures",
+    "price": 54.64
+  },
+  {
+    "id": 7,
+    "title": "America's Cradle of Quarterbacks: Western Pennsylvania's Football Factory from Johnny Unitas to Joe Montana",
+    "price": 22.5
+  },
+  {
+    "id": 8,
+    "title": "Aladdin and His Wonderful Lamp",
+    "price": 53.13
+  },
+  {
+    "id": 9,
+    "title": "Worlds Elsewhere: Journeys Around Shakespeare’s Globe",
+    "price": 40.3
+  },
+  {
+    "id": 10,
+    "title": "Wall and Piece",
+    "price": 44.18
+  },
+  {
+    "id": 11,
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": 17.66
+  },
+  {
+    "id": 12,
+    "title": "The Five Love Languages: How to Express Heartfelt Commitment to Your Mate",
+    "price": 31.05
+  },
+  {
+    "id": 13,
+    "title": "The Elephant Tree",
+    "price": 23.82
+  },
+  {
+    "id": 14,
+    "title": "The Bear and the Piano",
+    "price": 36.89
+  },
+  {
+    "id": 15,
+    "title": "Sophie's World",
+    "price": 15.94
+  },
+  {
+    "id": 16,
+    "title": "Penny Maybe",
+    "price": 33.29
+  },
+  {
+    "id": 17,
+    "title": "Maude (1883-1993):She Grew Up with the country",
+    "price": 18.02
+  },
+  {
+    "id": 18,
+    "title": "In a Dark, Dark Wood",
+    "price": 19.63
+  },
+  {
+    "id": 19,
+    "title": "Behind Closed Doors",
+    "price": 52.22
+  },
+  {
+    "id": 20,
+    "title": "You can't bury them all: Poems",
+    "price": 33.63
+  }
+]

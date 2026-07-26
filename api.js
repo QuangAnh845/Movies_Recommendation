@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const axios = require('axios');
@@ -8,8 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 // CẤU HÌNH HỆ THỐNG
-const TMDB_API_KEY = '550b538ce5133e3ab123c36ad7f786ca';
-const MONGO_URI = "mongodb://quanganh8405:quanganh8405@ac-qrsjhnd-shard-00-00.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-01.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-02.r1fok8g.mongodb.net:27017/?ssl=true&replicaSet=atlas-zlqtil-shard-0&authSource=admin&appName=Crawler";
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const MONGO_URI = process.env.MONGO_URI;
+const AI_SERVER_URL = process.env.AI_SERVER_URL || 'http://127.0.0.1:5000';
 const client = new MongoClient(MONGO_URI);
 
 async function connectDB() {
@@ -86,7 +88,7 @@ app.get('/api/users/:userId/recommendations', async (req, res) => {
     const userId = req.params.userId;
     try {
         // Gọi sang server Python AI
-        const aiResponse = await axios.get(`http://127.0.0.1:5000/recommend/${userId}`);
+        const aiResponse = await axios.get(`${AI_SERVER_URL}/recommend/${userId}`);
 
         if (aiResponse.data.success) {
             const recommendations = aiResponse.data.recommendations;
@@ -142,6 +144,7 @@ app.get('/api/users/:userId/recommendations', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("🚀 API Gateway đang chạy mượt mà tại địa chỉ: http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 API Gateway đang chạy mượt mà tại địa chỉ: http://localhost:${PORT}`);
 });

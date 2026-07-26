@@ -1,15 +1,19 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Tải các biến môi trường từ tệp .env
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app) # Cho phép Frontend và Node.js gọi API không bị chặn
 
 # Kết nối MongoDB Atlas
-MONGO_URI = "mongodb://quanganh8405:quanganh8405@ac-qrsjhnd-shard-00-00.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-01.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-02.r1fok8g.mongodb.net:27017/?ssl=true&replicaSet=atlas-zlqtil-shard-0&authSource=admin&appName=Crawler"
+MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client['MovieBigData']
 collection = db['UserRatings']

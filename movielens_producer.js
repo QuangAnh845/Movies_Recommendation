@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const csv = require('csv-parser');
 const amqplib = require('amqplib');
@@ -16,7 +17,7 @@ async function startDataPipeline() {
                 .on('end', resolve);
         });
 
-        const connection = await amqplib.connect('amqp://localhost');
+        const connection = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
         const channel = await connection.createChannel();
         const queueName = 'movie_ratings_queue';
         await channel.assertQueue(queueName, { durable: true });

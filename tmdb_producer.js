@@ -1,7 +1,8 @@
+require('dotenv').config();
 const axios = require('axios');
 const amqplib = require('amqplib');
 
-const TMDB_API_KEY = '550b538ce5133e3ab123c36ad7f786ca';
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TOTAL_PAGES = 50; // Số trang muốn cào
 
 //Hàm tạo độ trễ để tránh bị khóa API
@@ -9,7 +10,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function fetchTMDBAndPublish() {
     try {
-        const connection = await amqplib.connect('amqp://localhost');
+        const connection = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
         const channel = await connection.createChannel();
         const queueName = 'tmdb_movies_queue';
 

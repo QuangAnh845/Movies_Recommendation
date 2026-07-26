@@ -1,8 +1,8 @@
+require('dotenv').config();
 const amqplib = require('amqplib');
 const { MongoClient } = require('mongodb');
 
-
-const mongoURI = "mongodb://quanganh8405:quanganh8405@ac-qrsjhnd-shard-00-00.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-01.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-02.r1fok8g.mongodb.net:27017/?ssl=true&replicaSet=atlas-zlqtil-shard-0&authSource=admin&appName=Crawler";
+const mongoURI = process.env.MONGO_URI;
 const client = new MongoClient(mongoURI);
 
 async function startWorker() {
@@ -12,7 +12,7 @@ async function startWorker() {
         const collection = client.db('MovieBigData').collection('TMDB_Movies');
         console.log("Đã kết nối MongoDB Atlas (Bảng: TMDB_Movies)!");
 
-        const connection = await amqplib.connect('amqp://localhost');
+        const connection = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
         const channel = await connection.createChannel();
         const queueName = 'tmdb_movies_queue'; // Phải khớp với tên bên Producer
 

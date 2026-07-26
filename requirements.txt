@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+flask
+flask-cors
+pymongo
+dnspython
+certifi
+python-dotenv

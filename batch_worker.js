@@ -1,7 +1,8 @@
+require('dotenv').config();
 const amqplib = require('amqplib');
 const { MongoClient } = require('mongodb');
 
-const mongoURI = "mongodb://quanganh8405:quanganh8405@ac-qrsjhnd-shard-00-00.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-01.r1fok8g.mongodb.net:27017,ac-qrsjhnd-shard-00-02.r1fok8g.mongodb.net:27017/?ssl=true&replicaSet=atlas-zlqtil-shard-0&authSource=admin&appName=Crawler";
+const mongoURI = process.env.MONGO_URI;
 const client = new MongoClient(mongoURI);
 
 async function startBatchWorker() {
@@ -12,7 +13,7 @@ async function startBatchWorker() {
         await collection.deleteMany({ userId: { $regex: "^ML_" } }); 
         console.log("✅ Đã dọn dẹp dữ liệu cũ. Kết nối MongoDB thành công!");
 
-        const connection = await amqplib.connect('amqp://localhost');
+        const connection = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
         const channel = await connection.createChannel();
         const queueName = 'movie_ratings_queue';
         
